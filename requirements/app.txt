@@ -18,10 +18,16 @@ identify==2.6.15
     # via pre-commit
 idna==3.11
     # via anyio
+iniconfig==2.3.0
+    # via pytest
 nodeenv==1.9.1
     # via pre-commit
+packaging==25.0
+    # via pytest
 platformdirs==4.5.0
     # via virtualenv
+pluggy==1.6.0
+    # via pytest
 pre-commit==4.5.0
     # via -r requirements/app.in
 pydantic==2.12.5
@@ -30,6 +36,10 @@ pydantic==2.12.5
     #   fastapi
 pydantic-core==2.41.5
     # via pydantic
+pygments==2.19.2
+    # via pytest
+pytest==9.0.1
+    # via -r requirements/app.in
 pyyaml==6.0.3
     # via pre-commit
 starlette==0.50.0
