@@ -1,0 +1,41 @@
+[project]
+name = "your-project"
+version = "0.1.0"
+description = ""
+requires-python = ">=3.10"
+
+[tool.black]
+line-length = 88
+target-version = ["py310"]
+exclude = '''
+/(
+    \.git
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 88
+multi_line_output = 3
+include_trailing_comma = true
+
+[tool.flake8]
+max-line-length = 88
+extend-ignore = ["E203", "W503"]
+select = [
+    "E", "F", "W",
+    "B","C","SIM"
+]
+
+[tool.mypy]
+python_version = "3.13"
+warn_unused_configs = true
+ignore_missing_imports = true
+strict = true
+
+# Optional: uv configuration (optional but helpful)
+[tool.uv]
+managed = true
