@@ -12,7 +12,7 @@ from chess_rating.infrastructure.api.User import User
 app = FastAPI()
 
 Klient = ApiClient()
-KlientBaza = DatabaseClient("postgresql+psycopg2://postgres:Innominate12@172.25.240.1:1234/chess_api")
+KlientBaza = DatabaseClient("postgresql+psycopg2://postgres:@172.25.240.1:1234/chess_api")
 Transformer = Transform()
 
 Uzytkownik = User(Klient,KlientBaza,Transformer)
@@ -30,6 +30,12 @@ app.add_middleware(
     allow_headers = ["*"]   
 )
 
+
+@app.get("/home")
+def hello_world():
+     return {"Message": "Hello"}
+
+
 @app.get("/users", response_model=List[Profile])
 def get_users_api():
     return Uzytkownik.get_users()
@@ -40,7 +46,7 @@ def get_users_api():
 def add_one_user(username: str) -> List[Profile]:
     database_data = Uzytkownik.get_users()
     if username in database_data:
-        return [{"Nazwa": "user alerady in base"}]
+        return [{"Nazwa": "user juz jest w bazie"}]
     data = Uzytkownik.get(username)
     if "code" in data.keys():
          raise HTTPException(
@@ -48,14 +54,18 @@ def add_one_user(username: str) -> List[Profile]:
             detail="Nie udało się znaleźć użytkownika"
         )
     transformed_data = Uzytkownik.transform_data_to_profile(data)
-    Uzytkownik.insertData(transformed_data)
+    Uzytkownik.insert_data(transformed_data)
         
     return [transformed_data]
 
 @app.delete("/delete_user/{username}")
 def delete_user(username: str) -> None:
-    Uzytkownik.delete_user(username)
+    if Uzytkownik.delete_user(username):
+        return {"Message": "Poprawnie usunięto użytkownika"}
+    else: 
+        return {"Message": "Upewnij sie, ze uzytkownik zostal dodany, lub poprawnie wpisales nazwe"}
 
 
-
-
+@app.get("/sortuser/{asc_or_desc}", response_model=List[Profile])
+def sorting_user_by_rating(asc_or_desc: str):
+    return Uzytkownik.sorting_user_by_rating(asc_or_desc)
